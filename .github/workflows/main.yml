@@ -1,4 +1,4 @@
-name: Build Auriga APK
+name: Build Auriga debug APK
 
 on:
   push:
@@ -15,24 +15,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v7
 
-      - name: Set up Java 17
-        uses: actions/setup-java@v6
-        with:
-          distribution: temurin
-          java-version: '17'
-          cache: gradle
-
-      - name: Set up Android SDK 35
-        uses: android-actions/setup-android@v4
-        with:
-          packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
-
-      - name: Set up Gradle 8.11.1
-        uses: gradle/actions/setup-gradle@v6
-        with:
-          gradle-version: '8.11.1'
-
-      - name: Unpack project ZIP
+      - name: Find and unpack project ZIP
         id: project
         shell: bash
         run: |
@@ -67,6 +50,22 @@ jobs:
 
           PROJECT_DIR="$(dirname "$SETTINGS_FILE")"
           echo "dir=$PROJECT_DIR" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK 35
+        uses: android-actions/setup-android@v4
+        with:
+          packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
+
+      - name: Set up Gradle 8.11.1
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: '8.11.1'
 
       - name: Build debug APK
         env:
